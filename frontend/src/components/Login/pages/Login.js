@@ -1,9 +1,11 @@
 import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const LoginPage = (props) => {
+	const navigate = useNavigate();
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
+	let isAuthenticated = false;
 	const authUserHandler = event => {
 		event.preventDefault();
 		let loggingInUser = {
@@ -12,17 +14,22 @@ const LoginPage = (props) => {
 		};
 		setUsername('');
 		setPassword('');
-		let isAuthenticated = props.checkAuth(loggingInUser);
+		if (loggingInUser.authUsername !== "" && loggingInUser.authPassword !== "") {
+			isAuthenticated = true;
+			console.log("success");
+		} else {
+			isAuthenticated = false;
+		}
 		if (isAuthenticated) {
-			<Link to="/dashboard"/>
+			navigate("/dashboard")
 		}
 	};
 	const usernameChangeHandler = event => {
 		setUsername(event.target.value);
-	}
+	};
 	const passwordChangeHandler = event => {
 		setPassword(event.target.value);
-	}
+	};
 	return <div>
 			<h1>Login</h1>
 			<form className="login-form" onSubmit={authUserHandler}>
