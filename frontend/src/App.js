@@ -5,12 +5,14 @@ import logo from './logo.svg';
 import './App.css';
 import LoginPage from "./components/pages/Login/Login.js";
 import Dashboard from "./components/pages/Dashboard/Dashboard.js";
+import DashNav from "./components/pages/Dashboard/components/DashNav/DashNav.js";
 import Account from "./components/pages/Dashboard/pages/Account/Account.js";
 import ChangePass from "./components/pages/Dashboard/pages/Account/pages/ChangePass/ChangePass.js";
 
 function App() {
 	return (
     		<Router>
+			<DashNav/>
 			<main>
 				<Routes>
 					<Route path="/" element={<LoginPage/>}/>
