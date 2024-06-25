@@ -4,7 +4,7 @@ import ChangePass from "./pages/ChangePass/ChangePass.js";
 
 const Account = (props) => {
 	return <ul className="acc-opt">
-		<li><NavLink element={<ChangePass/>}>Change Password</NavLink></li>
+		<li><NavLink to="/changepass" element={<ChangePass/>}>Change Password</NavLink></li>
 		</ul>
 };
 
