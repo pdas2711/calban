@@ -1,6 +1,6 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
-import Account from "../../pages/Account/Account.js";
+import Account from "../pages/Dashboard/pages/Account/Account.js";
 
 const DashNav = (props) => {
 	return <ul className="main-header">
