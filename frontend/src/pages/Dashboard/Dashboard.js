@@ -1,4 +1,6 @@
 import React from "react";
+import {NavLink} from "react-router-dom";
+import NewBoard from "./pages/NewBoard/NewBoard.js";
 
 const Dashboard = (props) => {
 	return (
@@ -7,7 +9,7 @@ const Dashboard = (props) => {
 				<input className="search-textbox" type="text"/> <button type="submit">Search</button>
 			</form>
 			<br/><br/>
-			<button type="submit">New Project Board</button>
+			<NavLink to="/new_board" element={<NewBoard/>}><button type="submit">New Project Board</button></NavLink>
 		</div>
 	);
 }
