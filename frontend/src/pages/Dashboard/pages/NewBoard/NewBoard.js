@@ -1,8 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 
 const NewBoard = props => {
 	const [boardName, setBoardName] = useState();
-	const [description, setDescription] = useState():
+	const [description, setDescription] = useState();
 	const addBoardHandler = event => {
 	};
 	return (
