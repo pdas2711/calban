@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const usersRoutes = require('./routes/users-routes');
+const loginRoute = require('./routes/login-route');
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-app.use('/api/users', usersRoutes);
+app.use('/api/login', loginRoute);
 
 app.use((error, req, res,next) => {
         if(res.headerSent) {
