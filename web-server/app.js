@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const loginRoute = require('./routes/login-route');
+const dashMainRoute = require('./routes/dash-route');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/login', loginRoute);
+app.use('/api/dash', dashMainRoute);
 
 app.use((error, req, res,next) => {
         if(res.headerSent) {
