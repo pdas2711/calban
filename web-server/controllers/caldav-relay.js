@@ -43,4 +43,40 @@ function getBoardsXML(request) {
 	});
 }
 
+function getTasksVCalendar(request) {
+	return new Promise(function(resolve, reject) {
+		const username = request.username;
+		const password = request.password;
+		const userCalendarId = request.calendarId;
+		const auth = 'Basic ' + Buffer.from(username + ':' + password).toString('base64');
+		const reqOptions = {
+			host: 'localhost',
+			port: 5233,
+			path: '/' + userCalendarId,
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/xml',
+				'Depth': 'infinity',
+				'Authorization': auth
+			}
+			//body: '<d:propfind xmlns:d="DAV:" xmlns:cs="https://calendarserver.org/ns/"><d:prop><d:resourcetype /><d:displayname /></d:prop></d:propfind>'
+		};
+		let tasksRetrieved;
+		http.request(reqOptions, res => {
+			let data = '';
+			res.on('data', chunk => {
+				data += chunk;
+			})
+			res.on('end', () => {
+				tasksRetrieved = data;
+				resolve({collection: tasksRetrieved, isValid: true});
+			})
+		}).on('error', err => {
+			console.log('Error when sending request to CalDav server:', err.message);
+			reject({isValid: false, message: 'Error when sending request to CalDav server.'});
+		}).end();
+	});
+}
+
 exports.getBoardsXML = getBoardsXML;
+exports.getTasksVCalendar = getTasksVCalendar;
