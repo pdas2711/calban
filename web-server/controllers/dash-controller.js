@@ -6,7 +6,7 @@ async function retrieveCalendarData(request) {
 	const boardResponses = boards.collection.multistatus.response;
 	for (let i = 1; i < boardResponses.length; i++) {
 		const filterBoardName = boardResponses[i].propstat.prop.displayname;
-		const regex = /^\[Calban\] /
+		const regex = /^\[Calban\] /;
 		if (regex.test(filterBoardName)) {
 			boardsList.push(boardResponses[i]);
 		}
@@ -22,6 +22,8 @@ async function getBoards(req, res, next) {
 	}
 	res.status(200).json({boardsList: boards.boardsList});
 }
+
+
 
 async function getTasks(req, res, next) {
 	const boardsRequest = req.body;
@@ -47,7 +49,24 @@ async function getTasks(req, res, next) {
 		res.status(500).json({message: 'Error: ' + tasks.message});
 	}
 	const tasksList = [];
-	res.status(200).send(tasks);
+	const splitTasks = tasks.collection.split("\r\n");
+	let formattedTasks = [];
+	let newTask = {};
+	let addTaskLine = false;
+	for (let i = 1; i < splitTasks.length; i++) {
+		if (splitTasks[i] == "END:VTODO") {
+			addTaskLine = false;
+			formattedTasks.push(newTask);
+			newTask = {};
+		}
+		else if (addTaskLine) {
+			newTask[splitTasks[i].split(":")[0]] = splitTasks[i].split(":")[1];
+		}
+		else if (splitTasks[i] == "BEGIN:VTODO") {
+			addTaskLine = true;
+		}
+	}
+	res.status(200).send(formattedTasks);
 }
 
 function promoteTask(req, res, next) {
