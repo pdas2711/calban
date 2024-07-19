@@ -84,30 +84,43 @@ function addTaskVCalendar(request) {
 		const password = request.password;
 		const userCalendarId = request.calendarId;
 		const auth = 'Basic ' + Buffer.from(username + ':' + password).toString('base64');
-		const reqOptions = {
-			host: 'localhost',
-			port: 5233,
-			path: '/' + userCalendarId,
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/xml',
-				'Depth': 'infinity',
-				'Authorization': auth
-			}
-		};
-		const newTask = "BEGIN:VTODO\n" +
+		const newTask = request.previousData + "BEGIN:VTODO\n" +
 			"CREATED:" + request.task.created + "\n" +
 			"DTSTAMP:" + request.task.dtstamp + "\n" +
 			"LAST-MODIFIED:" + request.task.lastMod + "\n" +
 			"PERCENT-COMPLETE:" + request.task.percentComp + "\n" +
 			"SUMMARY:" + request.task.summary + "\n" +
-			"UID:" + uuidv4() + "\n";
-		http.request(reqOptions, res => {
-			res.on('data', chunk => {});
-		}).on('error', err => {
+			"UID:" + uuidv4() + "\n" +
+			"END:VTODO\n" +
+			"END:VCALENDAR";
+		const reqOptions = {
+			host: 'localhost',
+			port: 5233,
+			path: '/' + userCalendarId,
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'text/calendar',
+				'Authorization': auth
+			},
+			body: newTask
+		};
+		
+		var post_req = http.request(reqOptions, res => {
+			let data = '';
+			res.on('data', chunk => {
+				data += chunk;
+			});
+			res.on('end', () => {
+				console.log(data);
+			});
+		})
+		post_req.on('error', err => {
 			console.log('Error when sending request to CalDav server:', err.message);
 			reject({isValid: false, message: 'Error when sending request to CalDav server.'});
-		}).write(newTask).end();
+		});
+		console.log(newTask);
+		post_req.write(newTask);
+		post_req.end();
 	});
 }
 
