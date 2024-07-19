@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const loginRoute = require('./routes/login-route');
 const dashMainRoute = require('./routes/dash-route');
 
@@ -27,4 +28,10 @@ app.use((error, req, res,next) => {
         res.json({message: error.message || 'Internal error.'});
 });
 
-app.listen(3001);
+const mongo_url = 'mongodb+srv://<REDACTED>';
+
+mongoose.connect(mongo_url).then(function() {
+	app.listen(3001);
+}).catch(function(err) {
+	console.log(err);
+});
