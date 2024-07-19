@@ -104,6 +104,9 @@ function addTaskVCalendar(request) {
 			"UID:" + uuidv4() + "\n";
 		http.request(reqOptions, res => {
 			res.on('data', chunk => {});
+		}).on('error', err => {
+			console.log('Error when sending request to CalDav server:', err.message);
+			reject({isValid: false, message: 'Error when sending request to CalDav server.'});
 		}).write(newTask).end();
 	});
 }
