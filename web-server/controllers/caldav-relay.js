@@ -87,7 +87,7 @@ function addTaskVCalendar(request) {
 		const reqOptions = {
 			host: 'localhost',
 			port: 5233,
-			path: '/' + username,
+			path: '/' + userCalendarId,
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/xml',
