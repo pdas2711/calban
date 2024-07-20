@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.post('/user', loginController.login);
 router.post('/get_caldav', loginController.getServerCred);
+router.post('/change_password', loginController.changePassword);
 
 module.exports = router;
