@@ -22,7 +22,7 @@ async function login(req, res, next) {
 	if (!isValidPassword) {
 		return res.status(422).json({message: 'Invalid credentials.'});
 	}
-	return res.json({userId: authUser.id});
+	return res.status(200).json({userId: authUser.id});
 }
 
 async function getServerCred(req, res, next) {
@@ -39,5 +39,33 @@ async function getServerCred(req, res, next) {
 	return res.status(200).json(user.caldav);
 }
 
+async function changePassword(req, res, next) {
+	const { username, oldPassword, newPassword } = req.body;
+	let user;
+	try {
+		user = await User.findOne({username: username});
+	} catch (err) {
+		return res.status(500).json({message: 'Something went wrong.'});
+	}
+	if (!user) {
+		return res.status(422).json({message: 'Unable to find "' + user + '"'});
+	}
+	let isValidPassword = false;
+	try {
+		if (oldPassword === user.password) {
+			isValidPassword = true;
+		}
+	} catch (err) {
+		return res.status(500).json({message: 'Something went wrong.'});
+	}
+	if (!isValidPassword) {
+		return res.status(422).json({message: 'Invalid credentials.'});
+	}
+	user.password = newPassword;
+	user.save();
+	res.status(201).json({ message: 'Successfully changed password!' });
+}
+
 exports.login = login;
 exports.getServerCred = getServerCred;
+exports.changePassword = changePassword;
