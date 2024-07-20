@@ -66,6 +66,24 @@ async function changePassword(req, res, next) {
 	res.status(201).json({ message: 'Successfully changed password!' });
 }
 
+async function changeServerCreds(req, res, next) {
+	const { username, caldavUsername, caldavPassword } = req.body;
+	let user;
+	try {
+		user = await User.findOne({username: username});
+	} catch (err) {
+		return res.status(500).json({message: 'Something went wrong.'});
+	}
+	if (!user) {
+		return res.status(422).json({message: 'Unable to find "' + user + '"'});
+	}
+	user.caldav.caldavUsername = caldavUsername;
+	user.caldav.caldavPassword = caldavPassword;
+	user.save();
+	res.status(201).json({ message: 'Successfully changed CalDav credentials!' });
+}
+
 exports.login = login;
 exports.getServerCred = getServerCred;
 exports.changePassword = changePassword;
+exports.changeServerCreds = changeServerCreds;
