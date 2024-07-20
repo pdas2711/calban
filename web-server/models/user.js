@@ -4,7 +4,11 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
 	name: {type: String, required: true},
 	username: {type: String, required: true},
-	password: {type: String, required: true}
+	password: {type: String, required: true},
+	caldav : {
+		caldavUsername: {type: String, required: false},
+		caldavPassword: {type: String, required: false}
+	}
 });
 
 module.exports = mongoose.model('User', userSchema);
